@@ -6,7 +6,7 @@
   <groupId>com.tencent.angel</groupId>
   <artifactId>angel-format</artifactId>
   <packaging>jar</packaging>
-  <version>3.0.0</version>
+  <version>0.1.0</version>
 
   <properties>
     <hadoop-version>2.6.5</hadoop-version>
