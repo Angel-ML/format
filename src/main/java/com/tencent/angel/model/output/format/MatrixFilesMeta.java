@@ -18,6 +18,11 @@
 
 package com.tencent.angel.model.output.format;
 
+import com.tencent.angel.utils.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jettison.json.JSONObject;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,9 +31,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Model meta file, it includes matrix properties and partition meta
@@ -86,6 +88,9 @@ public class MatrixFilesMeta {
    */
   private Map<Integer, MatrixPartitionMeta> partMetas;
 
+  public static final String FEATURE_INDEX_RANGE_START = "feature.index.range.start";
+  public static final String FEATURE_INDEX_RANGE_END = "feature.index.range.end";
+
   /**
    * Create a MatrixFilesMeta
    *
@@ -100,7 +105,8 @@ public class MatrixFilesMeta {
    * @param partMetas partition meta
    */
   public MatrixFilesMeta(int matrixId, String matrixName, String formatClassName, int rowType,
-      int row, long col, int blockRow, long blockCol, Map<String, String> options,
+      int row, long col, int blockRow, long blockCol,
+      Map<String, String> options,
       Map<Integer, MatrixPartitionMeta> partMetas) {
     this.matrixId = matrixId;
     this.matrixName = matrixName;
@@ -128,7 +134,8 @@ public class MatrixFilesMeta {
    */
   public MatrixFilesMeta(int matrixId, String matrixName, String formatClassName, int rowType,
       int row, long col, int blockRow, long blockCol, Map<String, String> options) {
-    this(matrixId, matrixName, formatClassName, rowType, row, col, blockRow, blockCol, options,
+    this(matrixId, matrixName, formatClassName, rowType, row, col, blockRow, blockCol,
+        options,
         new ConcurrentSkipListMap<>());
   }
 
@@ -453,11 +460,55 @@ public class MatrixFilesMeta {
     return partMetas.get(partId);
   }
 
+  /**
+   * Get feature index range start
+   *
+   * @return feature index range start
+   */
+  public long getFeatureIndexStart() {
+    if (options.containsKey(FEATURE_INDEX_RANGE_START)) {
+      return Long.valueOf(options.get(FEATURE_INDEX_RANGE_START));
+    } else {
+      return -1;
+    }
+  }
+
+  /**
+   * Get feature index range end
+   *
+   * @return feature index range end
+   */
+  public long getFeatureIndexEnd() {
+    if (options.containsKey(FEATURE_INDEX_RANGE_END)) {
+      return Long.valueOf(options.get(FEATURE_INDEX_RANGE_END));
+    } else {
+      return -1;
+    }
+  }
+
+  /**
+   * Set feature index range start
+   *
+   * @param start feature index range start
+   */
+  public void setFeatureIndexStart(long start) {
+    options.put(FEATURE_INDEX_RANGE_START, String.valueOf(start));
+  }
+
+  /**
+   * Set feature index range end
+   *
+   * @param end feature index range end
+   */
+  public void setFeatureIndexEnd(long end) {
+    options.put(FEATURE_INDEX_RANGE_END, String.valueOf(end));
+  }
+
   @Override
   public String toString() {
     return "MatrixFilesMeta{" + "matrixId=" + matrixId + ", rowType=" + rowType + ", row=" + row
         + ", blockRow=" + blockRow + ", col=" + col + ", blockCol=" + blockCol + ", matrixName='"
-        + matrixName + '\'' + ", options=[" + join(",", options) + "], partMetas=["
+        + matrixName + '\'' + ", options=[" + StringUtils.join(";", options) + "], partMetas=["
         + partMetasString() + "]}";
   }
 
@@ -475,24 +526,6 @@ public class MatrixFilesMeta {
         sb.append(";");
       }
       sb.append("" + entry.getKey() + ":" + entry.getValue());
-    }
-    return sb.toString();
-  }
-
-  private String join(CharSequence separator, Map<String, String> kvMap) {
-    if (kvMap == null || kvMap.isEmpty()) {
-      return "";
-    }
-
-    StringBuilder sb = new StringBuilder();
-    boolean first = true;
-    for (Map.Entry<String, String> entry : kvMap.entrySet()) {
-      if (first) {
-        first = false;
-      } else {
-        sb.append(separator);
-      }
-      sb.append(entry.getKey() + ":" + entry.getValue());
     }
     return sb.toString();
   }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
  * compliance with the License. You may obtain a copy of the License at
  *
  * https://opensource.org/licenses/Apache-2.0
@@ -14,6 +14,7 @@
  * the License.
  *
  */
+
 
 package com.tencent.angel.model.output.format;
 
@@ -28,7 +29,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * The meta data for all partition in a server(ps)
  */
 public class PSMatrixFilesMeta {
-
   /**
    * Matrix id
    */
@@ -58,7 +58,7 @@ public class PSMatrixFilesMeta {
   /**
    * Create a  ServerMatrixFilesMeta for a matrix
    *
-   * @param matrixId matrix id
+   * @param matrixId  matrix id
    * @param partMetas partition meta
    */
   public PSMatrixFilesMeta(int matrixId, Map<Integer, MatrixPartitionMeta> partMetas) {
@@ -79,7 +79,7 @@ public class PSMatrixFilesMeta {
    * Add partition meta
    *
    * @param partId partition id
-   * @param meta partition meta
+   * @param meta   partition meta
    */
   public void addPartitionMeta(int partId, MatrixPartitionMeta meta) {
     partMetas.put(partId, meta);
@@ -99,6 +99,7 @@ public class PSMatrixFilesMeta {
    * Write server matrix meta to output stream
    *
    * @param output output stream
+   * @throws IOException
    */
   public void write(DataOutputStream output) throws IOException {
     output.writeInt(matrixId);
@@ -113,6 +114,7 @@ public class PSMatrixFilesMeta {
    * Read server matrix meta from input stream
    *
    * @param input input stream
+   * @throws IOException
    */
   public void read(DataInputStream input) throws IOException {
     matrixId = input.readInt();
@@ -125,8 +127,7 @@ public class PSMatrixFilesMeta {
     }
   }
 
-  @Override
-  public String toString() {
+  @Override public String toString() {
     return "ps partMetas=[" + partMetasString() + "]}";
   }
 
@@ -138,9 +139,9 @@ public class PSMatrixFilesMeta {
     StringBuilder sb = new StringBuilder();
     boolean first = true;
     for (Map.Entry<Integer, MatrixPartitionMeta> entry : partMetas.entrySet()) {
-      if (first) {
+      if (first)
         first = false;
-      } else {
+      else {
         sb.append(";");
       }
       sb.append("" + entry.getKey() + ":" + entry.getValue());

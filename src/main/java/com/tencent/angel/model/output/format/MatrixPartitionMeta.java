@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
  * compliance with the License. You may obtain a copy of the License at
  *
  * https://opensource.org/licenses/Apache-2.0
@@ -17,23 +17,20 @@
 
 package com.tencent.angel.model.output.format;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.*;
+
 /**
  * The meta data for a Matrix partition.
  */
 public class MatrixPartitionMeta {
-
   private static final Log LOG = LogFactory.getLog(MatrixPartitionMeta.class);
   /**
    * Partition id
@@ -110,18 +107,18 @@ public class MatrixPartitionMeta {
   /**
    * Create a PartitionMeta
    *
-   * @param partId partition index
+   * @param partId   partition index
    * @param startRow partition start row index
-   * @param endRow partition end row index
+   * @param endRow   partition end row index
    * @param startCol partition start column index
-   * @param endCol partition end column index
-   * @param nnz Non-zero element number in this partition
+   * @param endCol   partition end column index
+   * @param nnz      Non-zero element number in this partition
    * @param fileName The file name to which the partition is written
-   * @param offset The start position for this partition in the file
-   * @param length total write bytes
+   * @param offset   The start position for this partition in the file
+   * @param length   total write bytes
    */
   public MatrixPartitionMeta(int partId, int startRow, int endRow, long startCol, long endCol,
-      long nnz, String fileName, long offset, long length) {
+    long nnz, String fileName, long offset, long length) {
     this.partId = partId;
     this.startRow = startRow;
     this.endRow = endRow;
@@ -153,6 +150,7 @@ public class MatrixPartitionMeta {
         output.writeInt(meta.getRowId());
         output.writeLong(meta.getOffset());
         output.writeInt(meta.getElementNum());
+        output.writeInt(meta.getSaveType());
       }
     } else {
       output.writeInt(0);
@@ -176,7 +174,7 @@ public class MatrixPartitionMeta {
     rowMetas = new LinkedHashMap<>(rowIndexNum);
     for (int i = 0; i < rowIndexNum; i++) {
       RowPartitionMeta rowMeta =
-          new RowPartitionMeta(input.readInt(), input.readLong(), input.readInt());
+        new RowPartitionMeta(input.readInt(), input.readLong(), input.readInt(), input.readInt());
       rowMetas.put(rowMeta.getRowId(), rowMeta);
     }
   }
@@ -185,6 +183,8 @@ public class MatrixPartitionMeta {
    * Write matrix partition meta to a Json object
    *
    * @return json object
+   * @throws IOException
+   * @throws JSONException
    */
   public void write(JSONObject jsonObject) throws IOException, JSONException {
     jsonObject.put("partId", partId);
@@ -408,6 +408,8 @@ public class MatrixPartitionMeta {
 
   /**
    * Set non-zero element number
+   *
+   * @param nnz
    */
   public void setNnz(long nnz) {
     this.nnz = nnz;
@@ -442,6 +444,8 @@ public class MatrixPartitionMeta {
 
   /**
    * Get saved row number
+   *
+   * @return
    */
   public int getSaveRowNum() {
     return saveRowNum;
@@ -483,11 +487,9 @@ public class MatrixPartitionMeta {
     this.saveColElemNum = saveColElemNum;
   }
 
-  @Override
-  public String toString() {
+  @Override public String toString() {
     return "PartitionMeta{" + "partId=" + partId + ", startRow=" + startRow + ", endRow=" + endRow
-        + ", startCol=" + startCol + ", endCol=" + endCol + ", nnz=" + nnz + ", fileName='"
-        + fileName
-        + '\'' + ", offset=" + offset + ", length=" + length + '}';
+      + ", startCol=" + startCol + ", endCol=" + endCol + ", nnz=" + nnz + ", fileName='" + fileName
+      + '\'' + ", offset=" + offset + ", length=" + length + '}';
   }
 }
