@@ -7,7 +7,7 @@
   <artifactId>angel-format</artifactId>
   <packaging>jar</packaging>
   <version>0.1.0-SNAPSHOT</version>
-    <name>angel-format</name>
+  <name>angel-format</name>
 
   <properties>
     <hadoop-version>2.6.5</hadoop-version>
