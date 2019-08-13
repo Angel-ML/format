@@ -18,7 +18,6 @@
 
 package com.tencent.angel.model.output.format;
 
-import com.tencent.angel.utils.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jettison.json.JSONObject;
@@ -508,7 +507,7 @@ public class MatrixFilesMeta {
   public String toString() {
     return "MatrixFilesMeta{" + "matrixId=" + matrixId + ", rowType=" + rowType + ", row=" + row
         + ", blockRow=" + blockRow + ", col=" + col + ", blockCol=" + blockCol + ", matrixName='"
-        + matrixName + '\'' + ", options=[" + StringUtils.join(";", options) + "], partMetas=["
+        + matrixName + '\'' + ", options=[" + options.toString() + "], partMetas=["
         + partMetasString() + "]}";
   }
 
