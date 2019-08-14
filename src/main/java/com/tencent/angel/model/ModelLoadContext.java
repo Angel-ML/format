@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
  * compliance with the License. You may obtain a copy of the License at
  *
  * https://opensource.org/licenses/Apache-2.0
@@ -25,11 +25,10 @@ import java.util.List;
  * Model load context
  */
 public class ModelLoadContext {
-
   /**
    * Model save directory, load model from it
    */
-  private final String loadPath;
+  private volatile String loadPath;
 
   /**
    * Matrices load context
@@ -39,7 +38,7 @@ public class ModelLoadContext {
   /**
    * Create a new ModelLoadContext
    *
-   * @param loadPath Model save directory
+   * @param loadPath        Model save directory
    * @param matricesContext matrices load context
    */
   public ModelLoadContext(String loadPath, List<MatrixLoadContext> matricesContext) {
@@ -79,6 +78,14 @@ public class ModelLoadContext {
    */
   public String getLoadPath() {
     return loadPath;
+  }
+
+  /**
+   * Set model load path
+   * @param loadPath model load path
+   */
+  public void setLoadPath(String loadPath) {
+    this.loadPath = loadPath;
   }
 
   /**

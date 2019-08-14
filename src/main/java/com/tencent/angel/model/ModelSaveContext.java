@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017-2018 THL A29 Limited, a Tencent company. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
  * compliance with the License. You may obtain a copy of the License at
  *
  * https://opensource.org/licenses/Apache-2.0
@@ -25,7 +25,6 @@ import java.util.List;
  * Model save context
  */
 public class ModelSaveContext {
-
   /**
    * Model save directory
    */
@@ -35,6 +34,11 @@ public class ModelSaveContext {
    * Temp model save directory
    */
   private volatile String tmpSavePath;
+
+  /**
+   * Is checkpoint
+   */
+  private volatile boolean isCheckpoint = false;
 
   /**
    * Matrices save contexts
@@ -60,7 +64,7 @@ public class ModelSaveContext {
   /**
    * Create a new ModelSaveContext
    *
-   * @param savePath model save directory
+   * @param savePath        model save directory
    * @param matricesContext matrices save context
    */
   public ModelSaveContext(String savePath, List<MatrixSaveContext> matricesContext) {
@@ -120,5 +124,21 @@ public class ModelSaveContext {
    */
   public void setSavePath(String savePath) {
     this.savePath = savePath;
+  }
+
+  /**
+   * Is this a checkpoint operation
+   * @return true means is a checkpoint operation
+   */
+  public boolean isCheckpoint() {
+    return isCheckpoint;
+  }
+
+  /**
+   * Set this operation a checkpoint operation
+   * @param checkpoint
+   */
+  public void setCheckpoint(boolean checkpoint) {
+    isCheckpoint = checkpoint;
   }
 }

@@ -507,8 +507,7 @@ public class MatrixFilesMeta {
   public String toString() {
     return "MatrixFilesMeta{" + "matrixId=" + matrixId + ", rowType=" + rowType + ", row=" + row
         + ", blockRow=" + blockRow + ", col=" + col + ", blockCol=" + blockCol + ", matrixName='"
-        + matrixName  + "], partMetas=["
-        + partMetasString() + "]}";
+        + matrixName  + "], partMetas=[" + partMetasString() + "]}";
   }
 
   private String partMetasString() {
